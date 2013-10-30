@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+	<title>life-o-game</title>
+	<meta charset="utf8">
+	<meta author="Nicolás Daniel Palumbo <n@xinax.net>">
+	<link rel="stylesheet" href="styles.css">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript" src="src/Board.js"></script>
+	<script type="text/javascript" src="src/Cell.js"></script>
+	<script type="text/javascript">
+
+		var board, running = false;
+		
+		// Timer closure
+		function generation(){
+			if(running){
+
+				board.nextGeneration();
+				board.redraw();
+
+				setTimeout(function(){
+					generation();
+				}, 3000);
+			}
+		}
+		
+		$(document).on("ready", function(){
+
+			board = new Board();
+			board.populate();
+			board.generate();
+
+			$("#start").on("click", function(){
+
+				running = true;
+				generation();
+
+			});
+
+			$("#stop").on("click", function(e){
+
+				running = false;
+
+			});
+
+			$("#reset").on("click", function(e){
+
+				running = false;
+				board = new Board();
+				board.populate();
+				board.generate();
+
+			});
+
+		});
+
+	</script>
+</head>
+<body>
+	<div id="game"></div>
+	<div>
+		<button id="start">Start</button>
+		<button id="stop">Stop</button>
+		<button id="reset">Reset</button>
+	</div>
+</body>
+</html>

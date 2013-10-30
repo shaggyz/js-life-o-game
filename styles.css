@@ -1,0 +1,21 @@
+body{
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+table{
+	border-collapse: collapse;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+td{
+	width: 5px;
+	height: 5px;
+	border: 1px solid gray;
+}
+
+td.alive{
+	background-color: gray;
+}
