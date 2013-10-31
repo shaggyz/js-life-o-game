@@ -5,13 +5,13 @@ Board = function(){
 	 * Board width
 	 * @type {integer}
 	 */	
-	this.width = 30;
+	this.width = 50;
 
 	/**
 	 * Board height
 	 * @type {integer}
 	 */
-	this.height = 30;
+	this.height = 50;
 
 	/**
 	 * Matrix
@@ -167,7 +167,7 @@ Board = function(){
 	 */
 	this.seed = function(){
 
-		return Math.random() - .3 >= .5;
+		return Math.random() - .4 >= .5;
 
 	};
 

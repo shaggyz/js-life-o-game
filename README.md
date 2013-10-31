@@ -5,4 +5,6 @@ My own javascript implementation of Game of Life. Written just for fun on a rain
 
 Maybe it's buggy, but cells are moving :D
 
+Initial cells are placed randomly wihtout limit. 
 
+It will improve on my free times, with more investigation.
