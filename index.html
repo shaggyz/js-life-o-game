@@ -44,14 +44,24 @@
 
 			});
 
-			$("#reset").on("click", function(e){
+			$("#randomize").on("click", function(e){
 
 				running = false;
 				board = new Board();
-				board.populate();
+				board.populate(true);
 				board.generate();
 
 			});
+
+			$("#game table td").on("click", function(e){
+
+				if(!running){
+					$(this).toggleClass('alive');
+					board.toggleCell($(this).attr("data-x"), $(this).attr("data-y"));
+				}
+
+			});
+
 
 		});
 
@@ -62,7 +72,7 @@
 	<div>
 		<button id="start">Start</button>
 		<button id="stop">Stop</button>
-		<button id="reset">Reset</button>
+		<button id="randomize">Randomize</button>
 	</div>
 </body>
 </html>

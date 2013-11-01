@@ -59,8 +59,9 @@ Board = function(){
 				}
 
 				var id = "cell-" + x + "-" + y;
+				var data = ' data-x="' + x + '" data-y="' + y + '" ';
 
-				html += '<td' + cssClass + ' id="' + id + '"></td>';
+				html += '<td' + cssClass + ' id="' + id + '"' + data + '></td>';
 			}
 
 			html += "</tr>";
@@ -77,7 +78,7 @@ Board = function(){
 	 * Populates the matrix with cells
 	 * @return {void} 
 	 */
-	this.populate = function(){
+	this.populate = function(fill){
 
 		for(x=0; x<=this.width; x++){
 
@@ -85,7 +86,11 @@ Board = function(){
 
 			for(y=0; y<=this.height; y++){
 
-				this.matrix[x][y] = new Cell(x, y, this.seed());
+				if(typeof(fill) != "undefined" && fill){
+					this.matrix[x][y] = new Cell(x, y, this.seed());
+				} else {
+					this.matrix[x][y] = new Cell(x, y);
+				}
 
 			}
 
@@ -197,6 +202,16 @@ Board = function(){
 
 		return value;
 
+	};
+
+	/**
+	 * Toggles cell state
+	 * @param  {integer} x
+	 * @param  {integer} y 
+	 * @return {void}
+	 */
+	this.toggleCell = function(x, y){
+		this.matrix[x][y].state = !this.matrix[x][y].state;
 	};
 
 };
