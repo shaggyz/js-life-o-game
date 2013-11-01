@@ -58,7 +58,9 @@ Board = function(){
 					cssClass = ' class="alive"';
 				}
 
-				html += "<td" + cssClass + "></td>";
+				var id = "cell-" + x + "-" + y;
+
+				html += '<td' + cssClass + ' id="' + id + '"></td>';
 			}
 
 			html += "</tr>";
@@ -114,22 +116,7 @@ Board = function(){
 				if(cell.state){
 
 					// Live cell
-					if(cellValue < 2){
-						
-						// 1. dead
-						this.matrix[cell.x][cell.y].state = false;
-
-					} else if(cellValue == 2 || cellValue == 3){
-						
-						// 2. survival
-						this.matrix[cell.x][cell.y].state = true;
-
-					}else if(cellValue > 3){
-						
-						// 3. dead
-						this.matrix[cell.x][cell.y].state = false;
-
-					} 
+					this.matrix[cell.x][cell.y].state = (cellValue == 2 || cellValue == 3);
 
 				} else {
 				
@@ -156,14 +143,24 @@ Board = function(){
 	 */
 	this.redraw = function(){
 
-		$("#game").html('');
-		this.generate();
+		for(var x in this.matrix){
+
+			var row = this.matrix[x];
+
+			for(var y in row){
+
+				var cell = row[y];
+				$("#cell-" + x + "-" + y).toggleClass('alive', cell.state);
+
+			}
+
+		}
 
 	};
 
 	/**
 	 * Returns a pseudo-random boolean
-	 * @return {[type]} [description]
+	 * @return {[integer]} 
 	 */
 	this.seed = function(){
 
@@ -173,8 +170,8 @@ Board = function(){
 
 	/**
 	 * Calculates a value from cell neighbors
-	 * @param  {[type]} cell [description]
-	 * @return {[type]}      [description]
+	 * @param  {Cell} cell 
+	 * @return {integer}      
 	 */
 	this.calculateCellValue = function(cell){
 		
