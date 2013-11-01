@@ -118,12 +118,12 @@ Board = function(){
 				var cell = this.matrix[x][y];
 				var cellValue = this.calculateCellValue(cell);
 
-				if(cell.state && (cellValue < 2 || cellValue > 3)){
+				if(cellValue < 2 || cellValue > 3){
 
 					// Live cell
 					this.matrix[cell.x][cell.y].state = false;
 
-				} else if(!cell.state && cellValue == 3){
+				} else if(cellValue == 3){
 				
 					// Dead cell
 					this.matrix[cell.x][cell.y].state = true;
