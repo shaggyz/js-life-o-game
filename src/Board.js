@@ -113,23 +113,17 @@ Board = function(){
 				var cell = this.matrix[x][y];
 				var cellValue = this.calculateCellValue(cell);
 
-				if(cell.state){
+				if(cell.state && (cellValue < 2 || cellValue > 3)){
 
 					// Live cell
-					this.matrix[cell.x][cell.y].state = (cellValue == 2 || cellValue == 3);
+					this.matrix[cell.x][cell.y].state = false;
 
-				} else {
+				} else if(!cell.state && cellValue == 3){
 				
 					// Dead cell
-					if(cellValue == 3){
-						
-						// 4. born
-						this.matrix[cell.x][cell.y].state = true;
-
-					}
+					this.matrix[cell.x][cell.y].state = true;
 
 				}
-
 
 			}
 
