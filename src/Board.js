@@ -5,13 +5,13 @@ Board = function(){
 	 * Board width
 	 * @type {integer}
 	 */	
-	this.width = 150;
+	this.width = 3;
 
 	/**
 	 * Board height
 	 * @type {integer}
 	 */
-	this.height = 75;
+	this.height = 3;
 
 	/**
 	 * Matrix
@@ -47,11 +47,11 @@ Board = function(){
 
 		var html = "<table><tbody>";
 
-		for(y=0; y<=this.height; y++){
+		for(y=0; y<this.height; y++){
 
 			html += "<tr>";
 
-			for(x=0; x<=this.width; x++){
+			for(x=0; x<this.width; x++){
 
 				var cssClass = "";
 				if(this.matrix[x][y].state){
@@ -110,29 +110,33 @@ Board = function(){
     	// 2. Any live cell with two or three live neighbours lives on to the next generation.
     	// 3. Any live cell with more than three live neighbours dies, as if by overcrowding.
     	// 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
+    	
+    	var newMatrix = this.matrix;
 
-		for(x=0; x<=this.width; x++){
+		for(x=0; x<this.width; x++){
 
-			for(y=0; y<=this.height; y++){
+			for(y=0; y<this.height; y++){
 
 				var cell = this.matrix[x][y];
 				var cellValue = this.calculateCellValue(cell);
 
-				if(cellValue < 2 || cellValue > 3){
+				if(cell.state && (cellValue < 2 || cellValue > 3)){
 
-					// Live cell
-					this.matrix[cell.x][cell.y].state = false;
+					newMatrix[x][y].state = false;
 
-				} else if(cellValue == 3){
+				} else if(!cell.state && cellValue == 3){
 				
 					// Dead cell
-					this.matrix[cell.x][cell.y].state = true;
+					newMatrix[x][y].state = true;
 
-				}
-
+				} 				
 			}
 
 		}
+
+		alert("listo");
+
+		this.matrix = newMatrix;
 
 	};
 
@@ -199,6 +203,8 @@ Board = function(){
 			}
 
 		}
+
+		console.log("X: " + cell.x + ", Y: " + cell.y + " = " + value);
 
 		return value;
 
