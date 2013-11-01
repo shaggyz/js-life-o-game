@@ -5,13 +5,13 @@ Board = function(){
 	 * Board width
 	 * @type {integer}
 	 */	
-	this.width = 50;
+	this.width = 150;
 
 	/**
 	 * Board height
 	 * @type {integer}
 	 */
-	this.height = 50;
+	this.height = 75;
 
 	/**
 	 * Matrix
@@ -47,11 +47,11 @@ Board = function(){
 
 		var html = "<table><tbody>";
 
-		for(x=0; x<=this.width; x++){
+		for(y=0; y<=this.height; y++){
 
 			html += "<tr>";
 
-			for(y=0; y<=this.height; y++){
+			for(x=0; x<=this.width; x++){
 
 				var cssClass = "";
 				if(this.matrix[x][y].state){
