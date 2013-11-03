@@ -54,7 +54,7 @@ Board = function(){
 			for(x=0; x<this.width; x++){
 
 				var cssClass = "";
-				if(this.matrix[x][y].state){
+				if(this.matrix[y][x].state){
 					cssClass = ' class="alive"';
 				}
 
@@ -80,16 +80,16 @@ Board = function(){
 	 */
 	this.populate = function(fill){
 
-		for(x=0; x<=this.width; x++){
+		for(y=0; y<this.height; y++){
 
-			this.matrix[x] = [];
+			this.matrix[y] = [];
 
-			for(y=0; y<=this.height; y++){
+			for(x=0; x<this.width; x++){
 
 				if(typeof(fill) != "undefined" && fill){
-					this.matrix[x][y] = new Cell(x, y, this.seed());
+					this.matrix[y][x] = new Cell(x, y, this.seed());
 				} else {
-					this.matrix[x][y] = new Cell(x, y);
+					this.matrix[y][x] = new Cell(x, y);
 				}
 
 			}
@@ -111,32 +111,32 @@ Board = function(){
     	// 3. Any live cell with more than three live neighbours dies, as if by overcrowding.
     	// 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
     	
-    	var newMatrix = this.matrix;
+  //   	var newMatrix = this.matrix;
 
-		for(x=0; x<this.width; x++){
+		// for(x=0; x<this.width; x++){
 
-			for(y=0; y<this.height; y++){
+		// 	for(y=0; y<this.height; y++){
 
-				var cell = this.matrix[x][y];
-				var cellValue = this.calculateCellValue(cell);
+		// 		var cell = this.matrix[x][y];
+		// 		var cellValue = this.calculateCellValue(cell);
 
-				if(cell.state && (cellValue < 2 || cellValue > 3)){
+		// 		if(cell.state && (cellValue < 2 || cellValue > 3)){
 
-					newMatrix[x][y].state = false;
+		// 			newMatrix[x][y].state = false;
 
-				} else if(!cell.state && cellValue == 3){
+		// 		} else if(!cell.state && cellValue == 3){
 				
-					// Dead cell
-					newMatrix[x][y].state = true;
+		// 			// Dead cell
+		// 			newMatrix[x][y].state = true;
 
-				} 				
-			}
+		// 		} 				
+		// 	}
 
-		}
+		// }
 
-		alert("listo");
+		// alert("listo");
 
-		this.matrix = newMatrix;
+		// this.matrix = newMatrix;
 
 	};
 
@@ -146,18 +146,18 @@ Board = function(){
 	 */
 	this.redraw = function(){
 
-		for(var x in this.matrix){
+		// for(var x in this.matrix){
 
-			var row = this.matrix[x];
+		// 	var row = this.matrix[x];
 
-			for(var y in row){
+		// 	for(var y in row){
 
-				var cell = row[y];
-				$("#cell-" + x + "-" + y).toggleClass('alive', cell.state);
+		// 		var cell = row[y];
+		// 		$("#cell-" + x + "-" + y).toggleClass('alive', cell.state);
 
-			}
+		// 	}
 
-		}
+		// }
 
 	};
 
@@ -178,35 +178,35 @@ Board = function(){
 	 */
 	this.calculateCellValue = function(cell){
 		
-		var neighbors = cell.getNeighbors();
-		var value = 0;
+		// var neighbors = cell.getNeighbors();
+		// var value = 0;
 
-		for (var x in neighbors){
+		// for (var x in neighbors){
 
-			var neighbor = neighbors[x];
+		// 	var neighbor = neighbors[x];
 
-			// skips coords out of bounds 
-			if(neighbor.x < 0 || 
-			   neighbor.y < 0 ||
-			   neighbor.x >= this.width ||
-			   neighbor.y >= this.height
-			   ){
-				continue;
-			}
+		// 	// skips coords out of bounds 
+		// 	if(neighbor.x < 0 || 
+		// 	   neighbor.y < 0 ||
+		// 	   neighbor.x >= this.width ||
+		// 	   neighbor.y >= this.height
+		// 	   ){
+		// 		continue;
+		// 	}
 
-			var neighborCell = this.matrix[neighbor.x][neighbor.y];
+		// 	var neighborCell = this.matrix[neighbor.x][neighbor.y];
 
-			// if adyacent cell is alive, 
-			// increases the cell value
-			if(neighborCell.state){
-				value++;
-			}
+		// 	// if adyacent cell is alive, 
+		// 	// increases the cell value
+		// 	if(neighborCell.state){
+		// 		value++;
+		// 	}
 
-		}
+		// }
 
-		console.log("X: " + cell.x + ", Y: " + cell.y + " = " + value);
+		// console.log("X: " + cell.x + ", Y: " + cell.y + " = " + value);
 
-		return value;
+		// return value;
 
 	};
 
@@ -216,8 +216,51 @@ Board = function(){
 	 * @param  {integer} y 
 	 * @return {void}
 	 */
-	this.toggleCell = function(x, y){
-		this.matrix[x][y].state = !this.matrix[x][y].state;
+	this.toggleCell = function(x, y, state){
+		this.matrix[x][y].state = state;
 	};
+
+	/**
+	 * [debugMatrix description]
+	 * @return {[type]} [description]
+	 */
+	this.debugMatrix = function(){
+
+		var debug = "";
+
+		for(y=0; y<this.height; y++){
+
+			for(x=0; x<this.width; x++){
+
+				if(this.matrix[y][x].state){
+					debug += "1";
+				} else {
+					debug += "0";
+				}
+
+			}
+			
+			debug += "\n";
+
+		}
+
+		console.log(debug);
+
+	}
+
+
+	/**
+	 * [debugMatrix description]
+	 * @return {[type]} [description]
+	 */
+	this.debugCell = function(x, y){
+
+		var strState = "0";
+		if(this.matrix[y][x].state){
+			strState = "1";
+		}
+
+		console.log("-" + x + "," + y + ": " + strState);
+	}
 
 };

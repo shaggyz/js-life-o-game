@@ -56,8 +56,13 @@
 			$("#game table td").on("click", function(e){
 
 				if(!running){
-					$(this).toggleClass('alive');
-					board.toggleCell($(this).attr("data-x"), $(this).attr("data-y"));
+					if ($(this).hasClass('alive')){
+						$(this).removeClass('alive');	
+						board.toggleCell($(this).attr("data-x"), $(this).attr("data-y"), false);
+					} else {
+						$(this).addClass('alive');	
+						board.toggleCell($(this).attr("data-x"), $(this).attr("data-y"), true);
+					}
 				}
 
 			});
