@@ -5,19 +5,25 @@ Board = function(){
 	 * Board width
 	 * @type {integer}
 	 */	
-	this.width = 5;
+	this.width = 140;
 
 	/**
 	 * Board height
 	 * @type {integer}
 	 */
-	this.height = 5;
+	this.height = 70;
 
 	/**
 	 * Matrix
 	 * @type {Array}
 	 */
 	this.matrix = [];
+
+	/**
+	 * Cells counter
+	 * @type {Number}
+	 */
+	this.cells = 0;
 
 	/**
 	 * Generates the main board 
@@ -86,8 +92,8 @@ Board = function(){
 
 			for(x=0; x<this.width; x++){
 				
-				if((x == 2 && y == 1) || (x == 2 && y == 2) || (x == 2 && y == 3)){
-					this.matrix[y][x] = true;
+				if(typeof(fill) != "undefined" && fill){
+					this.matrix[y][x] = this.seed();
 				} else {
 					this.matrix[y][x] = false;
 				}
@@ -170,7 +176,7 @@ Board = function(){
 	 */
 	this.seed = function(){
 
-		return Math.random() - .4 >= .5;
+		return Math.random() - .3 >= .5;
 
 	};
 
@@ -213,8 +219,6 @@ Board = function(){
 			}
 
 		}
-
-		// console.log("X: " + x + ", Y: " + y + " = " + value);
 
 		return value;
 
