@@ -5,13 +5,13 @@ Board = function(){
 	 * Board width
 	 * @type {integer}
 	 */	
-	this.width = 3;
+	this.width = 5;
 
 	/**
 	 * Board height
 	 * @type {integer}
 	 */
-	this.height = 3;
+	this.height = 5;
 
 	/**
 	 * Matrix
@@ -54,7 +54,7 @@ Board = function(){
 			for(x=0; x<this.width; x++){
 
 				var cssClass = "";
-				if(this.matrix[y][x].state){
+				if(this.matrix[y][x]){
 					cssClass = ' class="alive"';
 				}
 
@@ -85,11 +85,11 @@ Board = function(){
 			this.matrix[y] = [];
 
 			for(x=0; x<this.width; x++){
-
-				if(typeof(fill) != "undefined" && fill){
-					this.matrix[y][x] = new Cell(x, y, this.seed());
+				
+				if((x == 2 && y == 1) || (x == 2 && y == 2) || (x == 2 && y == 3)){
+					this.matrix[y][x] = true;
 				} else {
-					this.matrix[y][x] = new Cell(x, y);
+					this.matrix[y][x] = false;
 				}
 
 			}
@@ -111,32 +111,37 @@ Board = function(){
     	// 3. Any live cell with more than three live neighbours dies, as if by overcrowding.
     	// 4. Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
     	
-  //   	var newMatrix = this.matrix;
+    	var newMatrix = [];
 
-		// for(x=0; x<this.width; x++){
+		for(y=0; y<this.height; y++){
 
-		// 	for(y=0; y<this.height; y++){
+			newMatrix[y] = [];
+		
+			for(x=0; x<this.width; x++){
 
-		// 		var cell = this.matrix[x][y];
-		// 		var cellValue = this.calculateCellValue(cell);
+				var cellValue = this.calculateCellValue(x, y);
 
-		// 		if(cell.state && (cellValue < 2 || cellValue > 3)){
+				if(this.matrix[y][x] && (cellValue < 2 || cellValue > 3)){
 
-		// 			newMatrix[x][y].state = false;
+					// Cell dies
+					newMatrix[y][x] = false;
 
-		// 		} else if(!cell.state && cellValue == 3){
+				} else if(!this.matrix[y][x] && cellValue == 3){
 				
-		// 			// Dead cell
-		// 			newMatrix[x][y].state = true;
+					// Cell birth/survival
+					newMatrix[y][x] = true;
 
-		// 		} 				
-		// 	}
+				} else {
 
-		// }
+					// Without changes
+					newMatrix[y][x] = this.matrix[y][x];
 
-		// alert("listo");
+				} 				
+			}
 
-		// this.matrix = newMatrix;
+		}
+
+		this.matrix = newMatrix;
 
 	};
 
@@ -146,18 +151,16 @@ Board = function(){
 	 */
 	this.redraw = function(){
 
-		// for(var x in this.matrix){
+		for(var y in this.matrix){
 
-		// 	var row = this.matrix[x];
+			var row = this.matrix[y];
+			for(var x in row){
 
-		// 	for(var y in row){
+				$("#cell-" + x + "-" + y).toggleClass('alive', row[x]);
 
-		// 		var cell = row[y];
-		// 		$("#cell-" + x + "-" + y).toggleClass('alive', cell.state);
+			}
 
-		// 	}
-
-		// }
+		}
 
 	};
 
@@ -176,37 +179,44 @@ Board = function(){
 	 * @param  {Cell} cell 
 	 * @return {integer}      
 	 */
-	this.calculateCellValue = function(cell){
+	this.calculateCellValue = function(x,y){
 		
-		// var neighbors = cell.getNeighbors();
-		// var value = 0;
+		var neighbors = [];
+		var value = 0;
 
-		// for (var x in neighbors){
+		neighbors.push({x: x - 1, y: y - 1 }); // a0
+		neighbors.push({x: x, y: y - 1}); // a1
+		neighbors.push({x: x + 1, y: y - 1}); // a2
+		neighbors.push({x: x - 1, y: y}); // a3
+		neighbors.push({x: x + 1, y: y}); // a4
+		neighbors.push({x: x - 1, y: y + 1}); // a5
+		neighbors.push({x: x, y: y + 1}); // a6
+		neighbors.push({x: x + 1, y: y + 1}); // a7
 
-		// 	var neighbor = neighbors[x];
+		for (var n in neighbors){
 
-		// 	// skips coords out of bounds 
-		// 	if(neighbor.x < 0 || 
-		// 	   neighbor.y < 0 ||
-		// 	   neighbor.x >= this.width ||
-		// 	   neighbor.y >= this.height
-		// 	   ){
-		// 		continue;
-		// 	}
+			var neighbor = neighbors[n];
 
-		// 	var neighborCell = this.matrix[neighbor.x][neighbor.y];
+			// skips coords out of bounds 
+			if(neighbor.x < 0 || 
+			   neighbor.y < 0 ||
+			   neighbor.x >= this.width ||
+			   neighbor.y >= this.height
+			   ){
+				continue;
+			}
 
-		// 	// if adyacent cell is alive, 
-		// 	// increases the cell value
-		// 	if(neighborCell.state){
-		// 		value++;
-		// 	}
+			// if adyacent cell is alive, 
+			// increases the cell value
+			if(this.matrix[neighbor.y][neighbor.x] == true){
+				value++;
+			}
 
-		// }
+		}
 
-		// console.log("X: " + cell.x + ", Y: " + cell.y + " = " + value);
+		// console.log("X: " + x + ", Y: " + y + " = " + value);
 
-		// return value;
+		return value;
 
 	};
 
@@ -217,7 +227,7 @@ Board = function(){
 	 * @return {void}
 	 */
 	this.toggleCell = function(x, y, state){
-		this.matrix[x][y].state = state;
+		this.matrix[y][x] = state;
 	};
 
 	/**
@@ -232,7 +242,7 @@ Board = function(){
 
 			for(x=0; x<this.width; x++){
 
-				if(this.matrix[y][x].state){
+				if(this.matrix[y][x]){
 					debug += "1";
 				} else {
 					debug += "0";
@@ -240,7 +250,7 @@ Board = function(){
 
 			}
 			
-			debug += "\n";
+			debug += "<br>";
 
 		}
 
@@ -256,7 +266,7 @@ Board = function(){
 	this.debugCell = function(x, y){
 
 		var strState = "0";
-		if(this.matrix[y][x].state){
+		if(this.matrix[y][x]){
 			strState = "1";
 		}
 

@@ -19,3 +19,7 @@ td{
 td.alive{
 	background-color: gray;
 }
+
+#game{
+	font-family: monospace;
+}
